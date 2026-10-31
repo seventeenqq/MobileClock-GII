@@ -4,14 +4,12 @@ using Microsoft.Maui.Graphics;
 
 namespace Clock
 {
-    // GraphicsView — область для рисования.
-    // IDrawable означает, что у класса есть метод Draw для MAUI.
     public class ClockView : GraphicsView, IDrawable
     {
         private DateTime time;
 
-        // Строка — цифра, столбец — сегмент. 1 = рисовать, 0 = пропустить.
-        // Сегменты расположены так:
+        // 1 = рисовать, 0 = пропустить.
+        // Сегменты расположены:
         //    0
         //  5   1
         //    6
@@ -40,13 +38,12 @@ namespace Clock
         public void SetTime(DateTime newTime)
         {
             time = newTime;
-            Invalidate(); // Просим MAUI заново вызвать Draw.
+            Invalidate();
         }
 
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
             // Рисунок занимает 280 x 64 условных единицы.
-            // Уменьшаем или увеличиваем его целиком под размер компонента.
             float scale = Math.Min(dirtyRect.Width / 280, dirtyRect.Height / 64);
             float left = (dirtyRect.Width - 280 * scale) / 2;
             float top = (dirtyRect.Height - 64 * scale) / 2;
@@ -56,7 +53,6 @@ namespace Clock
             canvas.Scale(scale, scale);
             canvas.FillColor = Colors.Black;
 
-            // Целочисленное деление даёт десятки, остаток — единицы.
             DrawDigit(canvas, time.Hour / 10, 4);
             DrawDigit(canvas, time.Hour % 10, 44);
             DrawColon(canvas, 87);
@@ -71,7 +67,7 @@ namespace Clock
 
         private void DrawDigit(ICanvas canvas, int digit, float x)
         {
-            // FillRectangle(x, y, ширина, высота). Размер цифры — 32 x 56.
+            // FillRectangle(x, y, ширина, высота).
             if (segments[digit, 0] == 1)
             {
                 canvas.FillRectangle(x + 6, 4, 20, 6);
